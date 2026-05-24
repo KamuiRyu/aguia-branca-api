@@ -1,0 +1,663 @@
+{
+	"info": {
+		"_postman_id": "c1a96752-d3a3-488f-a9cb-b20f92b7c6c4",
+		"name": "Sistema Águia Branca API",
+		"description": "Coleção de requisições para testar a API do fluxo de inovação Águia Branca.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Autenticação",
+			"item": [
+				{
+					"name": "POST Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"if (response.token) {",
+									"    pm.collectionVariables.set(\"token\", response.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"operador@email.com\",\n    \"password\": \"senha123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/autenticacao/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"autenticacao",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Validar Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/autenticacao/validar-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"autenticacao",
+								"validar-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Perfil & Home",
+			"item": [
+				{
+					"name": "GET Obter Meu Perfil",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Home Operador",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/home/operador",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"home",
+								"operador"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Home Gestor",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/home/gestor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"home",
+								"gestor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Home Liderança",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/home/lideranca",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"home",
+								"lideranca"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Ideias",
+			"item": [
+				{
+					"name": "GET Listar Ideias",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ideias",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Listar Ideias (Filtrado status=EM_ANALISE)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ideias?status=EM_ANALISE",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "EM_ANALISE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Listar Ideias Pendentes para Gestor",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ideias/analise",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias",
+								"analise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Cadastrar Ideia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"Digitalização do Canhoto de Passagem\",\n    \"descricao\": \"Substituir canhotos físicos de passagens por QR Code no aplicativo.\",\n    \"categoria\": \"SUSTENTABILIDADE\",\n    \"setor\": \"Operacional\",\n    \"impactoEsperado\": \"Redução drástica no uso de papel e agilidade no embarque.\",\n    \"urgencia\": \"Média\",\n    \"autorNome\": \"Marcos Operador\",\n    \"autorId\": \"OP-987\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/ideias",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Detalhes da Ideia",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ideias/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Avaliar Ideia",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"APROVADA\",\n    \"observacao\": \"Excelente ideia alinhada com as nossas diretrizes de inovação sustentável.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/ideias/1/avaliar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias",
+								"1",
+								"avaliar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Alterar Status Diretamente",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"EM_ANALISE\",\n    \"gestorResponsavel\": \"Ana Gestora\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/ideias/1/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ideias",
+								"1",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Projetos",
+			"item": [
+				{
+					"name": "GET Listar Projetos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/projetos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projetos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Criar Projeto Manualmente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Projeto QR Pass\",\n    \"status\": \"PLANEJADO\",\n    \"ideiaOrigemId\": 1,\n    \"equipeResponsavel\": \"Desenvolvimento Mobile\",\n    \"orcamento\": 25000.00,\n    \"prazo\": \"2026-10-30\",\n    \"percentualProgresso\": 0,\n    \"roiEsperado\": 18.5,\n    \"descricao\": \"Desenvolvimento do QR Code de embarque.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projetos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projetos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Detalhes do Projeto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/projetos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projetos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Atualizar Projeto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Projeto QR Pass - Fase 1\",\n    \"status\": \"EM_ANDAMENTO\",\n    \"percentualProgresso\": 35\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projetos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projetos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Estratégias",
+			"item": [
+				{
+					"name": "GET Listar Estratégias",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/estrategias",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estrategias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Criar Estratégia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"Digitalização de Processos 2026\",\n    \"descricao\": \"Reduzir 80% do uso de papel em processos operacionais e administrativos até o final de 2026.\",\n    \"ativa\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/estrategias",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estrategias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Atualizar Estratégia",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"Digitalização de Processos 2026 - Revisada\",\n    \"ativa\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/estrategias/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estrategias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Excluir Estratégia",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/estrategias/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estrategias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. Dashboard",
+			"item": [
+				{
+					"name": "GET Dashboard Liderança",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dashboard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dashboard"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
