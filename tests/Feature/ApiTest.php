@@ -79,12 +79,10 @@ test('obter dados do usuario logado', function () {
 
     $response->assertSuccessful()
         ->assertJson([
-            'data' => [
-                'id' => $user->id,
-                'nome' => $user->name,
-                'email' => $user->email,
-                'perfil' => $user->profile,
-            ],
+            'id' => $user->id,
+            'nome' => $user->name,
+            'email' => $user->email,
+            'perfil' => $user->profile,
         ]);
 });
 
@@ -164,12 +162,12 @@ test('filtrar e listar ideias', function () {
 
     $response = $this->getJson('/api/ideias');
     $response->assertSuccessful();
-    expect($response->json('data'))->toHaveCount(2);
+    expect($response->json())->toHaveCount(2);
 
     $responseFiltered = $this->getJson('/api/ideias?status=EM_ANALISE');
     $responseFiltered->assertSuccessful();
-    expect($responseFiltered->json('data'))->toHaveCount(1);
-    expect($responseFiltered->json('data.0.status'))->toBe('EM_ANALISE');
+    expect($responseFiltered->json())->toHaveCount(1);
+    expect($responseFiltered->json('0.status'))->toBe('EM_ANALISE');
 });
 
 test('gestor pode listar pendentes e avaliar ideia criando projeto ao aprovar', function () {
@@ -180,7 +178,7 @@ test('gestor pode listar pendentes e avaliar ideia criando projeto ao aprovar', 
 
     $this->getJson('/api/ideias/analise')
         ->assertSuccessful()
-        ->assertJsonCount(1, 'data');
+        ->assertJsonCount(1);
 
     $response = $this->patchJson("/api/ideias/{$idea->id}/avaliar", [
         'status' => 'APROVADA',
@@ -249,19 +247,19 @@ test('CRUD de projetos', function () {
     ]);
 
     $responseStore->assertSuccessful();
-    $projectId = $responseStore->json('data.id');
+    $projectId = $responseStore->json('id');
 
     $this->getJson('/api/projetos')
         ->assertSuccessful()
-        ->assertJsonCount(1, 'data');
+        ->assertJsonCount(1);
 
     $this->getJson("/api/projetos/{$projectId}")
         ->assertSuccessful()
-        ->assertJsonPath('data.nome', 'Projeto Especial')
-        ->assertJsonPath('data.equipeResponsavel', 'Time Alpha')
-        ->assertJsonPath('data.orcamento', '50000.00');
+        ->assertJsonPath('titulo', 'Projeto Especial')
+        ->assertJsonPath('responsavel', 'Time Alpha')
+        ->assertJsonPath('investimento', 50000.0);
 
-    $this->putJson("/api/projetos/{$projectId}", [
+    $this->patchJson("/api/projetos/{$projectId}", [
         'nome' => 'Projeto Especial Atualizado',
         'status' => 'EM_ANDAMENTO',
         'percentualProgresso' => 25,
@@ -286,11 +284,11 @@ test('CRUD de estrategias', function () {
     ]);
 
     $responseStore->assertSuccessful();
-    $strategyId = $responseStore->json('data.id');
+    $strategyId = $responseStore->json('id');
 
     $this->getJson('/api/estrategias')
         ->assertSuccessful()
-        ->assertJsonCount(1, 'data');
+        ->assertJsonCount(1);
 
     $this->putJson("/api/estrategias/{$strategyId}", [
         'titulo' => 'Reducao de Carbono 2030',

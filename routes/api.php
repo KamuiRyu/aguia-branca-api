@@ -46,7 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projetos', [ProjectController::class, 'index']);
     Route::post('/projetos', [ProjectController::class, 'store'])->middleware('role:GESTOR,LIDERANCA');
     Route::get('/projetos/{id}', [ProjectController::class, 'show']);
-    Route::put('/projetos/{id}', [ProjectController::class, 'update'])->middleware('role:GESTOR,LIDERANCA');
+    Route::match(['put', 'patch'], '/projetos/{id}', [ProjectController::class, 'update'])->middleware('role:GESTOR,LIDERANCA');
 
     // Estratégias
     Route::get('/estrategias', [StrategyController::class, 'index']);

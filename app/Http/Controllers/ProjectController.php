@@ -10,11 +10,51 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class ProjectController extends Controller
 {
     /**
+     * Map Portuguese/user-facing status to Database enum.
+     */
+    private function mapStatusToEnum(?string $status): ?string
+    {
+        if (is_null($status)) {
+            return null;
+        }
+
+        $inputStatusMap = [
+            'Planejamento' => 'PLANEJADO',
+            'planejamento' => 'PLANEJADO',
+            'PLANEJADO' => 'PLANEJADO',
+            'Em andamento' => 'EM_ANDAMENTO',
+            'em andamento' => 'EM_ANDAMENTO',
+            'EM_ANDAMENTO' => 'EM_ANDAMENTO',
+            'Concluído' => 'CONCLUIDO',
+            'concluído' => 'CONCLUIDO',
+            'Concluido' => 'CONCLUIDO',
+            'concluido' => 'CONCLUIDO',
+            'CONCLUIDO' => 'CONCLUIDO',
+            'CONCLUIDOS' => 'CONCLUIDO',
+            'Cancelado' => 'CANCELADO',
+            'cancelado' => 'CANCELADO',
+            'CANCELADO' => 'CANCELADO',
+        ];
+
+        return $inputStatusMap[$status] ?? $status;
+    }
+
+    /**
      * Display a listing of projects.
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $projects = Project::orderBy('id', 'desc')->get();
+        $query = Project::query();
+
+        if ($request->has('status')) {
+            $statusQuery = strtoupper($request->query('status', ''));
+            $enumStatus = $this->mapStatusToEnum($statusQuery);
+            if ($enumStatus) {
+                $query->where('status', $enumStatus);
+            }
+        }
+
+        $projects = $query->orderBy('id', 'desc')->get();
 
         return ProjectResource::collection($projects);
     }
@@ -24,6 +64,12 @@ class ProjectController extends Controller
      */
     public function store(Request $request): ProjectResource
     {
+        if ($request->has('status')) {
+            $request->merge([
+                'status' => $this->mapStatusToEnum($request->input('status')),
+            ]);
+        }
+
         $validated = $request->validate([
             'nome' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:PLANEJADO,EM_ANDAMENTO,CONCLUIDO,CANCELADO'],
@@ -66,6 +112,12 @@ class ProjectController extends Controller
      */
     public function update(Request $request, int $id): ProjectResource
     {
+        if ($request->has('status')) {
+            $request->merge([
+                'status' => $this->mapStatusToEnum($request->input('status')),
+            ]);
+        }
+
         $validated = $request->validate([
             'nome' => ['sometimes', 'required', 'string', 'max:255'],
             'status' => ['sometimes', 'required', 'in:PLANEJADO,EM_ANDAMENTO,CONCLUIDO,CANCELADO'],
@@ -100,7 +152,7 @@ class ProjectController extends Controller
             $updateData['deadline'] = $validated['prazo'];
         }
         if (array_key_exists('percentualProgresso', $validated)) {
-            $updateData['progress_percentage'] = $validated['percentualProgresso'] ?? 0;
+            $updateData['progress_percentage'] = $validated['percentualProgresso'];
         }
         if (array_key_exists('roiEsperado', $validated)) {
             $updateData['expected_roi'] = $validated['roiEsperado'];
@@ -110,6 +162,9 @@ class ProjectController extends Controller
         }
 
         $project->update($updateData);
+
+        // Fetch fresh project details and reload relation if needed
+        $project->refresh();
 
         return new ProjectResource($project);
     }
