@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Operador
-        User::factory()->create([
+        User::create([
             'name' => 'Carlos Operador',
             'email' => 'operador@email.com',
             'password' => Hash::make('senha123'),
@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Gestor
-        User::factory()->create([
+        User::create([
             'name' => 'Ana Gestora',
             'email' => 'gestor@email.com',
             'password' => Hash::make('senha123'),
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Liderança
-        User::factory()->create([
+        User::create([
             'name' => 'Bruno Liderança',
             'email' => 'lideranca@email.com',
             'password' => Hash::make('senha123'),
