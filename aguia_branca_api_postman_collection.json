@@ -400,12 +400,19 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/projetos",
+							"raw": "{{baseUrl}}/projetos?status=EM_ANDAMENTO",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"projetos"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "EM_ANDAMENTO",
+									"description": "Filtros válidos: EM_ANDAMENTO, CONCLUIDOS, PLANEJAMENTO, CANCELADO"
+								}
 							]
 						}
 					},
@@ -468,9 +475,9 @@
 					"response": []
 				},
 				{
-					"name": "PUT Atualizar Projeto",
+					"name": "PATCH Atualizar Projeto",
 					"request": {
-						"method": "PUT",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Authorization",
@@ -480,7 +487,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"Projeto QR Pass - Fase 1\",\n    \"status\": \"EM_ANDAMENTO\",\n    \"percentualProgresso\": 35\n}",
+							"raw": "{\n    \"status\": \"Concluído\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
